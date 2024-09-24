@@ -1,0 +1,18 @@
+stages:
+  - generate-docs
+
+# Job to generate Python documentation directly in the target directory
+generate_docs:
+  stage: generate-docs
+  image: python:3.9 # Use a Python image
+  before_script:
+    - python -m venv venv # Create a virtual environment
+    - source venv/bin/activate
+    - pip install --upgrade pip
+    - pip install sphinx # Install Sphinx
+    - pip install -r requirements.txt # Assuming you have a requirements.txt file for dependencies
+  script:
+    - mkdir -p node/docs/content-api/static # Create the target directory if it doesn't exist
+    - sphinx-build -b html docs/source node/docs/content-api/static # Generate Sphinx documentation directly into the target folder
+  only:
+    - master # Run only on the master branch
